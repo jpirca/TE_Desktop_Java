@@ -1,0 +1,5 @@
+.tree-table-row-cell:odd{
+    -fx-background-color: #F9F9F9;
+    -fx-background-insets: 0, 0 0 1 0;
+}
+

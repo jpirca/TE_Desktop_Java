@@ -1,0 +1,11 @@
+-- Adding column user to Agent table
+ALTER TABLE `agents` ADD `AgtUser` VARCHAR(10) NOT NULL AFTER `AgencyId`;
+
+-- Adding column password to Agent table
+ALTER TABLE `agents` ADD `AgtPass` VARCHAR(100) NOT NULL AFTER `AgtUser`;
+
+-- Updating user and password for some agents
+UPDATE `agents` SET `AgtUser` = 'jdelton', `AgtPass` = 'abcd1234' WHERE `agents`.`AgentId` = 1
+UPDATE `agents` SET `AgtUser` = 'jlisle', `AgtPass` = 'abcd1234' WHERE `agents`.`AgentId` = 2
+UPDATE `agents` SET `AgtUser` = 'dreynolds', `AgtPass` = 'abcd1234' WHERE `agents`.`AgentId` = 3
+UPDATE `agents` SET `AgtUser` = 'jcoville', `AgtPass` = 'abcd1234' WHERE `agents`.`AgentId` = 4
