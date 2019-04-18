@@ -12,7 +12,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
 import sample.model.Package;
 import java.net.URL;
@@ -24,11 +32,40 @@ public class MainProgram implements Initializable {
     @FXML
     private JFXTreeTableView<Package> tvPackages;
 
+    @FXML
+    private ImageView img_btn_package;
+
+    @FXML
+    private ImageView img_btn_products;
+
+    @FXML
+    private ImageView img_btn_settings;
+
+    @FXML
+    private ImageView img_btn_logout;
+
+    @FXML
+    private Pane pan_packages;
+
+    @FXML
+    private Pane pan_products;
+
+    @FXML
+    private Pane pan_settings;
+
+
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // Styling buttons
+        styleMenuButtons(img_btn_package);
+        styleMenuButtons(img_btn_products);
+        styleMenuButtons(img_btn_settings);
+        styleMenuButtons(img_btn_logout);
         // Call method to print the package table
         printPackageTable();
+
 
         tvPackages.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<Package>>() {
             @Override
@@ -46,6 +83,42 @@ public class MainProgram implements Initializable {
         });
 
     }
+
+    private void styleMenuButtons(ImageView menuButton) {
+        // set a clip to apply rounded border to the original image.
+        Rectangle clip = new Rectangle(menuButton.getFitWidth(), menuButton.getFitHeight());
+        clip.setArcWidth(30);
+        clip.setArcHeight(30);
+        menuButton.setClip(clip);
+    }
+
+    private void styleMenuButtonsIn(ImageView menuButton) {
+        // set a clip to apply rounded border to the original image.
+        Rectangle clip = new Rectangle(menuButton.getFitWidth(), menuButton.getFitHeight());
+        clip.setArcWidth(30);
+        clip.setArcHeight(30);
+        menuButton.setClip(clip);
+
+        // snapshot the rounded image.
+        SnapshotParameters parameters = new SnapshotParameters();
+        parameters.setFill(Color.TRANSPARENT);
+        WritableImage image = menuButton.snapshot(parameters, null);
+
+        // remove the rounding clip so that our effect can show through.
+        menuButton.setClip(null);
+
+        // apply a shadow effect.
+        menuButton.setEffect(new DropShadow(20, Color.BLACK));
+
+        // store the rounded image in the imageView.
+        menuButton.setImage(image);
+    }
+
+    private void styleMenuButtonsOut(ImageView menuButton) {
+        menuButton.setClip(null);
+        menuButton.setEffect(null);
+    }
+
 
     private void printPackageTable() {
         ObservableList<Package> packageList = FXCollections.observableArrayList();
@@ -143,5 +216,64 @@ public class MainProgram implements Initializable {
 
     }
 
+    @FXML
+    void on_MouseEntered_Package(MouseEvent event) {
+        styleMenuButtonsIn(img_btn_package);
+    }
 
+    @FXML
+    void on_MouseExit_Package(MouseEvent event) {
+        styleMenuButtonsOut(img_btn_package);
+    }
+
+    @FXML
+    void on_MouseEntered_Logout(MouseEvent event) {
+        styleMenuButtonsIn(img_btn_logout);
+    }
+
+    @FXML
+    void on_MouseEntered_Products(MouseEvent event) {
+        styleMenuButtonsIn(img_btn_products);
+    }
+
+    @FXML
+    void on_MouseEntered_Settings(MouseEvent event) {
+        styleMenuButtonsIn(img_btn_settings);
+    }
+
+    @FXML
+    void on_MouseExit_Logout(MouseEvent event) {
+        styleMenuButtonsOut(img_btn_logout);
+    }
+
+    @FXML
+    void on_MouseExit_Products(MouseEvent event) {
+        styleMenuButtonsOut(img_btn_products);
+    }
+
+    @FXML
+    void on_MouseExit_Settings(MouseEvent event) {
+        styleMenuButtonsOut(img_btn_settings);
+    }
+
+    @FXML
+    void on_ClickPackage(MouseEvent event) {
+        pan_packages.setVisible(true);
+        pan_settings.setVisible(false);
+        pan_products.setVisible(false);
+    }
+
+    @FXML
+    void on_ClickProducts(MouseEvent event) {
+        pan_products.setVisible(true);
+        pan_settings.setVisible(false);
+        pan_packages.setVisible(false);
+    }
+
+    @FXML
+    void on_ClickSettings(MouseEvent event) {
+        pan_settings.setVisible(true);
+        pan_products.setVisible(false);
+        pan_packages.setVisible(false);
+    }
 }
