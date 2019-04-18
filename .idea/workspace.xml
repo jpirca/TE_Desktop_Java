@@ -60,6 +60,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/sample/controller/DBHelper.java">
           <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="119">
+              <caret line="7" column="45" selection-start-line="7" selection-start-column="45" selection-end-line="7" selection-end-column="45" />
             <state relative-caret-position="153">
               <caret line="11" column="70" selection-start-line="11" selection-start-column="70" selection-end-line="11" selection-end-column="70" />
               <folding>
@@ -74,6 +76,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="264">
               <caret line="64" lean-forward="true" selection-start-line="64" selection-end-line="64" />
+
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -84,8 +87,13 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/sample/controller/MainProgram.java">
           <provider selected="true" editor-type-id="text-editor">
+
+            <state>
+              <caret line="25" selection-start-line="25" selection-end-line="25" />
+
             <state relative-caret-position="227">
               <caret line="32" column="12" lean-forward="true" selection-start-line="32" selection-start-column="12" selection-end-line="32" selection-end-column="28" />
+
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -179,7 +187,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -189,6 +196,7 @@
             </path>
             <path>
               <item name="TravelExpertDesktop_Java" type="b2602c69:ProjectViewProjectNode" />
+
               <item name="TravelExpertDesktop_Java" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
@@ -218,6 +226,7 @@
             </path>
             <path>
               <item name="TravelExpertDesktop_Java" type="b2602c69:ProjectViewProjectNode" />
+
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
               <item name="mysql-connector-java-8.0.15" type="70bed36:NamedLibraryElementNode" />
             </path>
@@ -225,6 +234,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -362,15 +372,23 @@
       <workItem from="1554264106943" duration="1839000" />
       <workItem from="1554303201191" duration="5765000" />
       <workItem from="1554845371096" duration="416000" />
+
+      <workItem from="1555563230603" duration="157000" />
+
       <workItem from="1555478003299" duration="296000" />
       <workItem from="1555480038411" duration="432000" />
       <workItem from="1555511402867" duration="11751000" />
       <workItem from="1555561554982" duration="1167000" />
+
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
+
+    <option name="totallyTimeSpent" value="53089000" />
+
     <option name="totallyTimeSpent" value="66578000" />
+
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -383,9 +401,13 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.6703755" visible="true" weight="0.12405446" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.6703755" visible="true" weight="0.17473525" />
+
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" />
       <window_info id="Designer" order="3" />
@@ -582,6 +604,12 @@
         </state>
       </provider>
     </entry>
+
+    <entry file="file://$PROJECT_DIR$/src/sample/controller/DBHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="45" selection-start-line="7" selection-start-column="45" selection-end-line="7" selection-end-column="45" />
+
     <entry file="file://$PROJECT_DIR$/src/sample/sample.fxml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="518">
@@ -631,16 +659,24 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="227">
           <caret line="32" column="12" lean-forward="true" selection-start-line="32" selection-start-column="12" selection-end-line="32" selection-end-column="28" />
+
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+
+    <entry file="file://$PROJECT_DIR$/src/sample/controller/MainProgram.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="25" selection-start-line="25" selection-end-line="25" />
+
     <entry file="file://$PROJECT_DIR$/src/sample/model/Package.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="348">
           <caret line="20" selection-start-line="20" selection-end-line="20" />
+
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
