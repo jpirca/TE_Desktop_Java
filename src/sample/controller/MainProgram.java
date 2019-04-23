@@ -93,6 +93,9 @@ public class MainProgram implements Initializable {
     @FXML
     private JFXButton btn_NewPackage;
 
+    @FXML
+    private ListView<ProductSupplier> lst_ProdSupAvail;
+
 
 
 
@@ -107,15 +110,27 @@ public class MainProgram implements Initializable {
         printPackageTable();
         fillPackageDetails(0);
         fillProductSupplier(0);
+        fillProductSupplierAva(0);
 
+    }
 
+    private void fillProductSupplierAva(int pos) {
+        int pkgId = tbl_Packages.getItems().get(pos).getPackageId();
+        List<ProductSupplier> listPS = PackagesDB.getAllProductSupplier(pkgId);
 
+        lst_ProdSupAvail.getItems().clear();
 
+        for (ProductSupplier ps : listPS)
+        {
+            lst_ProdSupAvail.getItems().add(ps);
+        }
     }
 
     private void fillProductSupplier(int pos) {
         int pkgId = tbl_Packages.getItems().get(pos).getPackageId();
         List<ProductSupplier> listPS = PackagesDB.getProductSupplierByPkg(pkgId);
+
+        lst_ProdSup.getItems().clear();
 
         for (ProductSupplier ps : listPS)
         {
@@ -212,6 +227,35 @@ public class MainProgram implements Initializable {
     void on_ClickTablePackage(MouseEvent event) {
         int position = tbl_Packages.getSelectionModel().selectedIndexProperty().get();
         fillPackageDetails(position);
+        fillProductSupplier(position);
+        fillProductSupplierAva(position);
+    }
+
+    @FXML
+    void on_ClickAddProdSup(ActionEvent event) {
+        //listView.getSelectionModel().getSelectedItem();
+        ProductSupplier ps = lst_ProdSupAvail.getSelectionModel().getSelectedItem();
+        int pkgId = Integer.parseInt(txt_PackageID.getText());
+
+        if (ps==null){
+            Alert alert = new Alert(Alert.AlertType.ERROR,"You must select a Product/Suppl;ier to be added");
+            alert.showAndWait();
+        }
+        else
+        {
+            boolean result = PackagesDB.insertProdSup(ps,pkgId);
+            if (result)
+            {
+                int position = tbl_Packages.getSelectionModel().selectedIndexProperty().get();
+                if (position<0)
+                {
+                    position = 0;
+                }
+                fillProductSupplier(position);
+                fillProductSupplierAva(position);
+            }
+        }
+
     }
 
     private void fillPackageDetails(int position) {

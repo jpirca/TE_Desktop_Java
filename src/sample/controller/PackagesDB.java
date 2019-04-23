@@ -104,10 +104,10 @@ public class PackagesDB {
             while (rs.next())
             {
                 ProductSupplier ps = new ProductSupplier(rs.getInt(1),
-                                                        rs.getInt(2),
-                                                        rs.getString(3),
-                                                        rs.getInt(4),
-                                                        rs.getString(5));
+                        rs.getInt(2),
+                        rs.getString(3),
+                        rs.getInt(4),
+                        rs.getString(5));
 
                 listPS.add(ps);
             }
@@ -117,6 +117,65 @@ public class PackagesDB {
             e.printStackTrace();
         }
         return listPS;
+    }
+
+    public static List<ProductSupplier> getAllProductSupplier(int pkgId)
+    {
+        List<ProductSupplier> listPS = new ArrayList<>();
+        Connection conn = DBHelper.getConnection();
+        String sql = "SELECT tb.ProductSupplierId, tb.ProductId, tc.ProdName, tb.SupplierId, td.SupName " +
+                        "FROM products_suppliers as tb  " +
+                        "INNER JOIN products as tc ON (tc.ProductId = tb.ProductId) " +
+                        "INNER JOIN suppliers as td ON (td.SupplierId = tb.SupplierId) " +
+                        "WHERE tb.ProductSupplierId NOT IN (" +
+                                                    "SELECT ta.ProductSupplierId " +
+                                                    "FROM packages_products_suppliers as ta " +
+                                                    "WHERE ta.PackageId = ?) " +
+                        "ORDER BY tb.ProductId";
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1,pkgId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next())
+            {
+                ProductSupplier ps = new ProductSupplier(rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getString(3),
+                        rs.getInt(4),
+                        rs.getString(5));
+
+                listPS.add(ps);
+            }
+            rs.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listPS;
+    }
+
+    public static boolean insertProdSup(ProductSupplier newProdSup, int pkgId){
+        Connection conn = DBHelper.getConnection();
+        String sql = "INSERT INTO packages_products_suppliers (PackageId,ProductSupplierId) values (?,?)";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, pkgId);
+            stmt.setInt(2, newProdSup.getProductSupplierId());
+
+            int result = stmt.executeUpdate();
+            if (result == 0)
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR,"There was an error. Please try later");
+                alert.showAndWait();
+                return false;
+            }
+
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
 }
