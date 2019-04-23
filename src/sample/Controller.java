@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -17,6 +18,9 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import sample.controller.AlertBox;
+import sample.model.Agent;
+import sample.model.AgentManagement;
 
 public class Controller {
 
@@ -49,7 +53,39 @@ public class Controller {
     @FXML
     void onClick_btnSignIn(ActionEvent event) {
         Parent root = null;
+        String username = txtUser.getText();
+        String p = txtPass.getText();
+        Agent agent = new Agent();
+        agent.setAgtUser(username);
+        agent.setAgtPassword(p);
         try {
+            if (AgentManagement.Authenticate(agent) != 0) {
+                try {
+                    root = FXMLLoader.load(getClass().getResource("mainProgram.fxml"));
+
+                    // Close Sign In windows
+                    Stage prevStage = (Stage) btnSignIn.getScene().getWindow();
+                    prevStage.close();
+
+                    // Open main program windows
+                    Stage stage = new Stage();
+                    stage.setTitle("Travel Expert Agency");
+                    stage.setScene(new Scene(root, 1300, 700));
+                    //stage.initStyle(StageStyle.UNDECORATED);
+                    stage.show();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                //message
+                AlertBox.display("Error","Incorrect username or password", "Try again");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        /*try {
             root = FXMLLoader.load(getClass().getResource("mainProgram.fxml"));
 
             // Close Sign In windows
@@ -65,7 +101,7 @@ public class Controller {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
     }
 
