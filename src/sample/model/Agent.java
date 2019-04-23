@@ -29,6 +29,11 @@ public class Agent {
         AgtPassword = agtPassword;
     }
 
+    // Empty constructor
+    public Agent() {
+
+    }
+
     public int getAgentId() {
         return AgentId;
     }

@@ -9,7 +9,7 @@ public class DBHelper {
         Connection conn = null;
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/travelexperts","javajsp","abcd1234*");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/travelexperts","harv","password");
         } catch (ClassNotFoundException e){
             e.printStackTrace();
         } catch (SQLException e) {
