@@ -14,12 +14,12 @@
       <ImageView fitHeight="400.0" fitWidth="700.0" pickOnBounds="true" preserveRatio="true" />
       <AnchorPane layoutX="350.0" layoutY="40.0" prefHeight="316.0" prefWidth="303.0" style="-fx-background-color: #005266;">
          <children>
-            <JFXTextField fx:id="txtUser" focusColor="#0f237f" layoutX="24.0" layoutY="117.0" prefHeight="25.0" prefWidth="260.0" promptText="username" unFocusColor="WHITE">
+            <JFXTextField fx:id="txtUser" focusColor="#0f237f" layoutX="24.0" layoutY="117.0" prefHeight="25.0" prefWidth="260.0" promptText="username" style="-fx-text-inner-color: #ff6666;" unFocusColor="WHITE">
                <font>
                   <Font name="Verdana" size="14.0" />
                </font>
             </JFXTextField>
-            <JFXPasswordField fx:id="txtPass" focusColor="#0f237f" layoutX="24.0" layoutY="158.0" prefHeight="25.0" prefWidth="260.0" promptText="password" unFocusColor="WHITE">
+            <JFXPasswordField fx:id="txtPass" focusColor="#0f237f" layoutX="24.0" layoutY="158.0" prefHeight="25.0" prefWidth="260.0" promptText="password" style="-fx-text-inner-color: #ff6666;" unFocusColor="WHITE">
                <font>
                   <Font name="Verdana" size="14.0" />
                </font>

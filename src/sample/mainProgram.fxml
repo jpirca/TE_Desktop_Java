@@ -40,7 +40,7 @@
                   <Image url="@../images/settings.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="img_btn_logout" fitHeight="100.0" fitWidth="200.0" layoutX="5.0" layoutY="325.0" onMouseEntered="#on_MouseEntered_Logout" onMouseExited="#on_MouseExit_Logout" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="img_btn_logout" fitHeight="100.0" fitWidth="200.0" layoutX="5.0" layoutY="325.0" onMouseClicked="#on_ClickBtnLogout" onMouseEntered="#on_MouseEntered_Logout" onMouseExited="#on_MouseExit_Logout" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/logout.png" />
                </image>
@@ -115,8 +115,8 @@
                      <content>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <ListView fx:id="lst_ProdSup" layoutX="426.0" layoutY="37.0" prefHeight="165.0" prefWidth="286.0" />
-                              <ListView fx:id="lst_ProdSupAvail" layoutX="25.0" layoutY="35.0" prefHeight="166.0" prefWidth="327.0" />
+                              <ListView fx:id="lst_ProdSup" layoutX="426.0" layoutY="37.0" prefHeight="128.0" prefWidth="286.0" />
+                              <ListView fx:id="lst_ProdSupAvail" layoutX="25.0" layoutY="35.0" prefHeight="133.0" prefWidth="327.0" />
                               <JFXButton fx:id="btn_AddProdSup" layoutX="360.0" layoutY="66.0" onAction="#on_ClickAddProdSup" prefHeight="29.0" prefWidth="60.0" text="&gt; &gt; &gt;">
                                  <ripplerFill>
                                     <RadialGradient centerX="0.5" centerY="0.49523809523809526" radius="0.5">
@@ -137,8 +137,8 @@
                                     </RadialGradient>
                                  </ripplerFill>
                               </JFXButton>
-                              <Label layoutX="25.0" layoutY="8.0" prefHeight="24.0" prefWidth="328.0" text="PRODUCTS / SUPPLIERS AVAILABLE" textAlignment="CENTER" />
-                              <Label layoutX="424.0" layoutY="6.0" prefHeight="27.0" prefWidth="289.0" text="PRODUCTS SELECTED" textAlignment="CENTER" />
+                              <Label layoutX="69.0" layoutY="8.0" prefHeight="24.0" prefWidth="284.0" text="PRODUCTS / SUPPLIERS AVAILABLE" textAlignment="CENTER" underline="true" />
+                              <Label layoutX="503.0" layoutY="6.0" prefHeight="27.0" prefWidth="210.0" text="PRODUCTS SELECTED" textAlignment="CENTER" underline="true" />
                            </children>
                         </AnchorPane>
                      </content></Tab>
