@@ -267,6 +267,11 @@ public class MainProgram implements Initializable {
     }
 
     @FXML
+    void on_ClickBtnExport(MouseEvent event) {
+        Export.ToCSV();
+    }
+
+    @FXML
     void on_ClickAddProdSup(ActionEvent event) {
         ProductSupplier ps = lst_ProdSupAvail.getSelectionModel().getSelectedItem();
         int pkgId = Integer.parseInt(txt_PackageID.getText());
