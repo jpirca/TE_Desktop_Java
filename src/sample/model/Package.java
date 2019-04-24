@@ -4,8 +4,6 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Package extends RecursiveTreeObject<Package> {

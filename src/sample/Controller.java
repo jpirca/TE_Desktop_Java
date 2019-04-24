@@ -104,24 +104,6 @@ public class Controller {
             AlertBox.display("Error","Database error", "Call tech support");
             e.printStackTrace();
         }
-        /*try {
-            root = FXMLLoader.load(getClass().getResource("mainProgram.fxml"));
-
-            // Close Sign In windows
-            Stage prevStage = (Stage) btnSignIn.getScene().getWindow();
-            prevStage.close();
-
-            // Open main program windows
-            Stage stage = new Stage();
-            stage.setTitle("Travel Expert Agency");
-            stage.setScene(new Scene(root, 1300, 700));
-            //stage.initStyle(StageStyle.UNDECORATED);
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
     }
 
     @FXML
