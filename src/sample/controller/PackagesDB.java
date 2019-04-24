@@ -71,11 +71,16 @@ public class PackagesDB {
 
     public static boolean insertPackage(Package newPck){
         Connection conn = DBHelper.getConnection();
-        //String sql = "INSERT packages (PkgName,PkgDesc,PkgBasePrice,PkgAgencyCommission) values (?,?,?,?)";
-        String sql = "INSERT INTO packages (PkgName) values (?)";
+        String sql = "INSERT INTO packages (PkgName,PkgStartDate,PkgEndDate,PkgDesc,PkgBasePrice,PkgAgencyCommission) values (?,?,?,?,?,?)";
+        //String sql = "INSERT INTO packages (PkgName) values (?)";
         try {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, newPck.getPkgName());
+            stmt.setDate(2, (Date) newPck.getPkgStartDate());
+            stmt.setDate(3, (Date) newPck.getPkgEndDate());
+            stmt.setString(4, newPck.getPkgDesc());
+            stmt.setDouble(5, newPck.getPkgBasePrice());
+            stmt.setDouble(6, newPck.getPkgAgencyCommission());
 
             int result = stmt.executeUpdate();
             if (result == 0)
@@ -91,6 +96,8 @@ public class PackagesDB {
         }
         return true;
     }
+
+
 
     public static List<ProductSupplier> getProductSupplierByPkg(int pkgId)
     {
@@ -158,6 +165,29 @@ public class PackagesDB {
     public static boolean insertProdSup(ProductSupplier newProdSup, int pkgId){
         Connection conn = DBHelper.getConnection();
         String sql = "INSERT INTO packages_products_suppliers (PackageId,ProductSupplierId) values (?,?)";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, pkgId);
+            stmt.setInt(2, newProdSup.getProductSupplierId());
+
+            int result = stmt.executeUpdate();
+            if (result == 0)
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR,"There was an error. Please try later");
+                alert.showAndWait();
+                return false;
+            }
+
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    public static boolean deleteProdSup(ProductSupplier newProdSup, int pkgId){
+        Connection conn = DBHelper.getConnection();
+        String sql = "DELETE FROM packages_products_suppliers WHERE PackageId=? AND ProductSupplierId=?";
         try {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, pkgId);

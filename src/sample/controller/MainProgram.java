@@ -2,9 +2,12 @@ package sample.controller;
 
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,9 +31,11 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 public class MainProgram implements Initializable {
 
@@ -70,13 +75,10 @@ public class MainProgram implements Initializable {
     private JFXTextField txt_PackageName;
 
     @FXML
+    private JFXTextField txt_search;
+
+    @FXML
     private JFXTextField txt_PackageID;
-
-    @FXML
-    private JFXTextField txt_PckStartDate;
-
-    @FXML
-    private JFXTextField txt_PckEndDate;
 
     @FXML
     private JFXTextField txt_PckDesc;
@@ -96,6 +98,12 @@ public class MainProgram implements Initializable {
     @FXML
     private ListView<ProductSupplier> lst_ProdSupAvail;
 
+    @FXML
+    private JFXDatePicker txt_PckStartDate;
+
+    @FXML
+    private JFXDatePicker txt_PckEndDate;
+
 
 
 
@@ -112,7 +120,34 @@ public class MainProgram implements Initializable {
         fillProductSupplier(0);
         fillProductSupplierAva(0);
 
+        FilteredList<Package> fl = new FilteredList<>(packageList,e -> true);
+        txt_search.setOnKeyReleased(event -> {
+            txt_search.textProperty().addListener((observableValue, oldValue, newValue)->{
+                fl.setPredicate((Predicate<? super Package>) pack->{
+                    if (newValue == null || newValue.isEmpty())
+                    {
+                        return true;
+                    }
+                    String lowerCase = newValue.toLowerCase();
+                    if(pack.getPackageId().toString().contains(newValue))
+                    {
+                        return true;
+                    }else if (pack.getPkgName().toLowerCase().contains(lowerCase))
+                    {
+                        return true;
+                    }
+                    return false;
+                });
+            });
+            SortedList<Package> sortedList = new SortedList<>(fl);
+            sortedList.comparatorProperty().bind(tbl_Packages.comparatorProperty());
+            tbl_Packages.setItems(sortedList);
+        });
+
     }
+
+
+
 
     private void fillProductSupplierAva(int pos) {
         int pkgId = tbl_Packages.getItems().get(pos).getPackageId();
@@ -233,7 +268,6 @@ public class MainProgram implements Initializable {
 
     @FXML
     void on_ClickAddProdSup(ActionEvent event) {
-        //listView.getSelectionModel().getSelectedItem();
         ProductSupplier ps = lst_ProdSupAvail.getSelectionModel().getSelectedItem();
         int pkgId = Integer.parseInt(txt_PackageID.getText());
 
@@ -258,11 +292,41 @@ public class MainProgram implements Initializable {
 
     }
 
+    @FXML
+    void on_ClickDelProdSup(ActionEvent event) {
+        ProductSupplier ps = lst_ProdSup.getSelectionModel().getSelectedItem();
+        int pkgId = Integer.parseInt(txt_PackageID.getText());
+
+        if (ps==null){
+            AlertBox.display("Error selection","You must select a Product/Supplier to be deleted","OK");
+        }
+        else
+        {
+            boolean result = PackagesDB.deleteProdSup(ps,pkgId);
+            if (result)
+            {
+                int position = tbl_Packages.getSelectionModel().selectedIndexProperty().get();
+                if (position<0)
+                {
+                    position = 0;
+                }
+                fillProductSupplier(position);
+                fillProductSupplierAva(position);
+            }
+        }
+    }
+
+    public static final LocalDate LOCAL_DATE (String dateString){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse(dateString, formatter);
+        return localDate;
+    }
+
     private void fillPackageDetails(int position) {
         txt_PackageID.setText(String.valueOf(packageList.get(position).getPackageId()));
         txt_PackageName.setText(String.valueOf(packageList.get(position).getPkgName()));
-        txt_PckStartDate.setText(String.valueOf(packageList.get(position).getPkgStartDate()));
-        txt_PckEndDate.setText(String.valueOf(packageList.get(position).getPkgEndDate()));
+        txt_PckStartDate.setValue(LOCAL_DATE(packageList.get(position).getPkgStartDate().toString()));
+        txt_PckEndDate.setValue(LOCAL_DATE(String.valueOf(packageList.get(position).getPkgEndDate())));
         txt_PckDesc.setText(packageList.get(position).getPkgDesc());
         txt_PckBasePrice.setText(String.valueOf(packageList.get(position).getPkgBasePrice()));
         txt_AgencyCommission.setText(String.valueOf(packageList.get(position).getPkgAgencyCommission()));
@@ -334,42 +398,68 @@ public class MainProgram implements Initializable {
         boolean result = false;
         Package oldPck;
 
-        if (tbl_Packages.getSelectionModel().getSelectedItem() == null)
+        if ((Validator.isFilled(txt_PackageName,"Package Name")) &&
+                (Validator.isFilled(txt_PckDesc,"Package Description")) &&
+                (Validator.isFilled(txt_AgencyCommission,"Agency Commission")) &&
+                (Validator.isFilled(txt_PckBasePrice,"Base Price")) &&
+                (Validator.compareDates(txt_PckStartDate,"Start Date",txt_PckEndDate,"End Date")) &&
+                (Validator.isDouble(txt_PckBasePrice,"Base Price")) &&
+                (Validator.isDouble(txt_AgencyCommission,"Agency Commission")))
         {
-            oldPck = tbl_Packages.getItems().get(0);
-        }
-        else {
-            oldPck = tbl_Packages.getSelectionModel().getSelectedItem();
-        }
-        Package newPck = null;
-        newPck = new Package(Integer.parseInt(txt_PackageID.getText()),
-                                            txt_PackageName.getText(),
-                                            oldPck.getPkgStartDate(),
-                                            oldPck.getPkgEndDate(),
-                                            txt_PckDesc.getText(),
-                                            Double.parseDouble(txt_PckBasePrice.getText()),
-                                            Double.parseDouble(txt_AgencyCommission.getText()));
-        result = PackagesDB.updatePackage(newPck,oldPck);
+            if (tbl_Packages.getSelectionModel().getSelectedItem() == null) {
+                oldPck = tbl_Packages.getItems().get(0);
+            } else {
+                oldPck = tbl_Packages.getSelectionModel().getSelectedItem();
+            }
+            Package newPck = null;
+            newPck = new Package(Integer.parseInt(txt_PackageID.getText()),
+                    txt_PackageName.getText(),
+                    oldPck.getPkgStartDate(),
+                    oldPck.getPkgEndDate(),
+                    txt_PckDesc.getText(),
+                    Double.parseDouble(txt_PckBasePrice.getText()),
+                    Double.parseDouble(txt_AgencyCommission.getText()));
+            result = PackagesDB.updatePackage(newPck, oldPck);
 
-        if (result) {
-           Alert alert = new Alert(Alert.AlertType.INFORMATION,"The record was updated successfully");
-           alert.showAndWait();
-           packageList.removeAll();
-           tbl_Packages.getColumns().clear();
-           printPackageTable();
+            if (result) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "The record was updated successfully");
+                alert.showAndWait();
+                packageList.removeAll();
+                tbl_Packages.getColumns().clear();
+                printPackageTable();
+            }
         }
     }
 
     @FXML
     void on_ClickBtnInsert(ActionEvent event) {
-        Package newPkg = new Package(0,
-                txt_PackageName.getText(),
-                Date.valueOf("2018-02-02"),
-                Date.valueOf("2019-02-02"),
-                txt_PckDesc.getText(),
-                Double.parseDouble(txt_PckBasePrice.getText()),
-                Double.parseDouble(txt_AgencyCommission.getText()));
-        boolean result = PackagesDB.insertPackage(newPkg);
+        if ((Validator.isFilled(txt_PackageName,"Package Name")) &&
+                (Validator.isFilled(txt_PckDesc,"Package Description")) &&
+                (Validator.isFilled(txt_AgencyCommission,"Agency Commission")) &&
+                (Validator.isFilled(txt_PckBasePrice,"Base Price")) &&
+                (Validator.compareDates(txt_PckStartDate,"Start Date",txt_PckEndDate,"End Date")) &&
+                (Validator.isDouble(txt_PckBasePrice,"Base Price")) &&
+                (Validator.isDouble(txt_AgencyCommission,"Agency Commission")))
+        {
+            Package newPkg = new Package(0,
+                    txt_PackageName.getText(),
+                    java.sql.Date.valueOf(LOCAL_DATE(txt_PckStartDate.getValue().toString())),
+                    java.sql.Date.valueOf(LOCAL_DATE(txt_PckEndDate.getValue().toString())),
+                    txt_PckDesc.getText(),
+                    Double.parseDouble(txt_PckBasePrice.getText()),
+                    Double.parseDouble(txt_AgencyCommission.getText()));
+            boolean result = PackagesDB.insertPackage(newPkg);
+            if (result)
+            {
+                AlertBox.display("Insert new Package","The packages was created","OK");
+                packageList.removeAll();
+                tbl_Packages.getColumns().clear();
+                printPackageTable();
+
+                fillProductSupplier(packageList.size()-1);
+                fillProductSupplierAva(packageList.size()-1);
+            }
+        }
     }
 
     @FXML
@@ -382,8 +472,8 @@ public class MainProgram implements Initializable {
     private void clearTextFields() {
         txt_PackageID.clear();
         txt_PackageName.clear();
-        txt_PckStartDate.clear();
-        txt_PckEndDate.clear();
+        txt_PckStartDate.setValue(LOCAL_DATE(LocalDate.now().toString()));
+        txt_PckEndDate.setValue(LOCAL_DATE(LocalDate.now().toString()));
         txt_PckDesc.clear();
         txt_PckBasePrice.clear();
         txt_AgencyCommission.clear();
