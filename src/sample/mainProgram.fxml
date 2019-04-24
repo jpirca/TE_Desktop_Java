@@ -49,7 +49,7 @@
       </AnchorPane>
       <Pane fx:id="pan_packages" layoutX="210.0" layoutY="10.0" prefHeight="675.0" prefWidth="957.0" style="-fx-background-color: WHITE; -fx-background-radius: 30; -fx-border-radius: 30; -fx-border-color: GRAY; -fx-border-width: 5;" visible="false">
          <children>
-            <TabPane layoutX="24.0" layoutY="408.0" prefHeight="239.0" prefWidth="905.0" style="-fx-border-color: GRAY; -fx-background-radius: 30; -fx-border-radius: 30; -fx-border-width: 5; -fx-background-color: #FFFFFF; -fx-padding: 10;" styleClass="jfx-tab-pane" stylesheets="@../Style/style.css" tabClosingPolicy="UNAVAILABLE">
+            <TabPane layoutX="24.0" layoutY="413.0" prefHeight="234.0" prefWidth="905.0" style="-fx-border-color: GRAY; -fx-background-radius: 30; -fx-border-radius: 30; -fx-border-width: 5; -fx-background-color: #FFFFFF; -fx-padding: 10;" styleClass="jfx-tab-pane" stylesheets="@../Style/style.css" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab text="Details">
                      <content>
@@ -117,7 +117,7 @@
                            <children>
                               <ListView fx:id="lst_ProdSup" layoutX="426.0" layoutY="37.0" prefHeight="128.0" prefWidth="286.0" />
                               <ListView fx:id="lst_ProdSupAvail" layoutX="25.0" layoutY="35.0" prefHeight="133.0" prefWidth="327.0" />
-                              <JFXButton fx:id="btn_AddProdSup" layoutX="360.0" layoutY="66.0" onAction="#on_ClickAddProdSup" prefHeight="29.0" prefWidth="60.0" text="&gt; &gt; &gt;">
+                              <JFXButton fx:id="btn_AddProdSup" layoutX="360.0" layoutY="66.0" onAction="#on_ClickAddProdSup" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: #c5c0c0;" text="&gt; &gt; &gt;">
                                  <ripplerFill>
                                     <RadialGradient centerX="0.5" centerY="0.49523809523809526" radius="0.5">
                                        <stops>
@@ -127,7 +127,7 @@
                                     </RadialGradient>
                                  </ripplerFill>
                               </JFXButton>
-                              <JFXButton fx:id="btn_DelProdSup" layoutX="361.0" layoutY="115.0" onAction="#on_ClickDelProdSup" prefHeight="27.0" prefWidth="59.0" text="&lt; &lt; &lt;">
+                              <JFXButton fx:id="btn_DelProdSup" layoutX="361.0" layoutY="115.0" onAction="#on_ClickDelProdSup" prefHeight="27.0" prefWidth="59.0" style="-fx-background-color: #c5c0c0;" text="&lt; &lt; &lt;">
                                  <ripplerFill>
                                     <RadialGradient centerX="0.5" centerY="0.49523809523809526" radius="0.5">
                                        <stops>
@@ -144,7 +144,7 @@
                      </content></Tab>
               </tabs>
             </TabPane>
-            <TableView fx:id="tbl_Packages" layoutX="30.0" layoutY="121.0" onMouseClicked="#on_ClickTablePackage" prefHeight="270.0" prefWidth="894.0" />
+            <TableView fx:id="tbl_Packages" layoutX="30.0" layoutY="121.0" onMouseClicked="#on_ClickTablePackage" prefHeight="283.0" prefWidth="894.0" />
             <Label layoutX="339.0" layoutY="10.0" prefHeight="47.0" prefWidth="463.0" text="PACKAGES" textOverrun="CENTER_WORD_ELLIPSIS" underline="true">
                <font>
                   <Font name="Verdana Bold" size="43.0" />
@@ -156,6 +156,17 @@
                </font>
             </Label>
             <JFXTextField fx:id="txt_search" layoutX="108.0" layoutY="88.0" prefHeight="25.0" prefWidth="193.0" />
+            <JFXButton layoutX="806.0" layoutY="85.0" onMouseClicked="#on_ClickBtnExport" prefHeight="25.0" prefWidth="118.0" style="-fx-background-color: #c5c0c0;" text="Export to CSV">
+               <ripplerFill>
+                  <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                     <stops>
+                        <Stop color="#7c7a7a" />
+                        <Stop color="#7c7a7a" offset="0.007662835249042145" />
+                        <Stop color="WHITE" offset="1.0" />
+                     </stops>
+                  </RadialGradient>
+               </ripplerFill>
+            </JFXButton>
          </children>
       </Pane>
       <Pane fx:id="pan_settings" layoutX="210.0" prefHeight="687.0" prefWidth="957.0" style="-fx-background-color: GREEN;" visible="false">
