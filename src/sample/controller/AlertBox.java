@@ -14,7 +14,8 @@ public class AlertBox {
 
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle(title);
-        window.setMinWidth(250);
+        window.setMinWidth(200);
+        window.setWidth(400);
 
         Label label = new Label();
         label.setText(message);
