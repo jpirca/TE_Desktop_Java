@@ -119,7 +119,10 @@ public class MainProgram implements Initializable {
         fillPackageDetails(0);
         fillProductSupplier(0);
         fillProductSupplierAva(0);
+        createTableFilter();
+    }
 
+    private void createTableFilter() {
         FilteredList<Package> fl = new FilteredList<>(packageList,e -> true);
         txt_search.setOnKeyReleased(event -> {
             txt_search.textProperty().addListener((observableValue, oldValue, newValue)->{
@@ -143,10 +146,7 @@ public class MainProgram implements Initializable {
             sortedList.comparatorProperty().bind(tbl_Packages.comparatorProperty());
             tbl_Packages.setItems(sortedList);
         });
-
     }
-
-
 
 
     private void fillProductSupplierAva(int pos) {
@@ -477,5 +477,10 @@ public class MainProgram implements Initializable {
         txt_PckDesc.clear();
         txt_PckBasePrice.clear();
         txt_AgencyCommission.clear();
+    }
+
+    @FXML
+    void on_ClickBtnLogout(MouseEvent event) {
+        System.exit(0);
     }
 }
