@@ -113,6 +113,7 @@ public class MainProgram implements Initializable {
     @FXML
     private JFXButton btn_UpdatePassword;
 
+    @FXML
     private ListView<ProductSupplier> lst_ProdSupAvail;
 
     @FXML
@@ -519,6 +520,7 @@ public class MainProgram implements Initializable {
         }
     }
 
+    @FXML
     void on_ClickBtnLogout(MouseEvent event) {
         System.exit(0);
     }
