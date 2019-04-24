@@ -169,16 +169,15 @@
             </JFXButton>
          </children>
       </Pane>
-      <Pane fx:id="pan_settings" layoutX="210.0" prefHeight="687.0" prefWidth="957.0" style="-fx-background-color: GREEN;" visible="false">
+      <Pane fx:id="pan_settings" layoutX="210.0" prefHeight="687.0" prefWidth="957.0" visible="false">
          <children>
-            <Label layoutY="23.0" prefHeight="17.0" prefWidth="118.0" text="Settings" />
-            <Label layoutX="9.0" layoutY="78.0" prefHeight="24.0" prefWidth="86.0" text="Old Password" />
-            <Label layoutX="9.0" layoutY="105.0" prefHeight="28.0" prefWidth="84.0" text="New Password" />
-            <Label layoutX="9.0" layoutY="135.0" prefHeight="28.0" prefWidth="84.0" text="Confirm New Password" />
-            <JFXTextField fx:id="txt_OldPassword" layoutX="97.0" layoutY="79.0" prefHeight="25.0" prefWidth="160.0" text="Old Password" />
-            <JFXTextField fx:id="txt_NewPassword" layoutX="97.0" layoutY="105.0" prefHeight="27.0" prefWidth="158.0" text="New Password" />
-            <JFXTextField fx:id="txt_ConfirmNewPassword" layoutX="97.0" layoutY="135.0" prefHeight="27.0" prefWidth="158.0" text="Confirm New Password" />
-            <JFXButton layoutX="45.0" layoutY="170.0" onAction="#on_ClickBtnChangePassword" prefHeight="27.0" prefWidth="93.0" style="-fx-background-color: #c5c0c0;" text="Change Password">
+            <Label layoutX="28.0" layoutY="119.0" prefHeight="34.0" prefWidth="139.0" text="Old Password" />
+            <Label layoutX="100.0" layoutY="169.0" prefHeight="27.0" prefWidth="67.0" text="New Password" />
+            <Label layoutX="42.0" layoutY="214.0" prefHeight="34.0" prefWidth="125.0" text="Confirm New Password" />
+            <JFXTextField fx:id="txt_OldPassword" layoutX="172.0" layoutY="120.0" prefHeight="34.0" prefWidth="210.0" text="Old Password" />
+            <JFXTextField fx:id="txt_NewPassword" layoutX="173.0" layoutY="169.0" prefHeight="28.0" prefWidth="210.0" text="New Password" />
+            <JFXTextField fx:id="txt_ConfirmNewPassword" layoutX="172.0" layoutY="214.0" prefHeight="34.0" prefWidth="210.0" text="Confirm New Password" />
+            <JFXButton layoutX="249.0" layoutY="270.0" onAction="#on_ClickBtnChangePassword" prefHeight="34.0" prefWidth="139.0" style="-fx-background-color: #c5c0c0;" text="Change Password">
                <font>
                   <Font name="Verdana" size="13.0" />
                </font>
@@ -191,6 +190,11 @@
                   </RadialGradient>
                </ripplerFill>
             </JFXButton>
+            <Label layoutX="224.0" layoutY="40.0" prefHeight="60.0" prefWidth="530.0" text="CHANGE PASSWORD" textOverrun="CENTER_WORD_ELLIPSIS" underline="true">
+               <font>
+                  <Font name="Verdana Bold" size="43.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
    </children>

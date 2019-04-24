@@ -24,8 +24,6 @@ public class Export {
         ObservableList<Package> packageList = FXCollections.observableArrayList();
         String filename = System.getProperty("user.home") + "/Downloads/package.csv";
 
-
-        //String filename ="C:\\Users\\801219\\Documents\\Java\\test.csv";
         try {
             FileWriter fw = new FileWriter(filename);
             packageList = PackagesDB.getAllPackage();
@@ -49,26 +47,8 @@ public class Export {
             }
 
 
-
-
-//            Connection conn = DBHelper.getConnection();
-//            String query = "SELECT BookingId, BookingDate, BookingNo FROM bookings";
-//            Statement stmt = conn.createStatement();
-//            ResultSet rs = stmt.executeQuery(query);
-//            while (rs.next()) {
-//                fw.append(Integer.toString(rs.getInt(1)));
-//                fw.append(',');
-//                fw.append(rs.getString(2));
-//                /*fw.append(',');
-//                fw.append(rs.getString(3));
-//                fw.append(',');
-//                fw.append(rs.getString(4));*/
-//                fw.append('\n');
-//            }
-//
             fw.flush();
             fw.close();
-            //conn.close();
 
             AlertBox.display("Success!","CSV File is created successfully.", "OK");
         } catch (Exception e) {
