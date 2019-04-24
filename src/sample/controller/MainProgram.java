@@ -19,11 +19,14 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
+import sample.Controller;
+import sample.model.AgentManagement;
 import sample.model.Package;
 import sample.model.ProductSupplier;
 
 import java.net.URL;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,6 +36,8 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class MainProgram implements Initializable {
+
+    //Integer agtID = 0;
 
     ObservableList<Package> packageList = FXCollections.observableArrayList();
 
@@ -93,6 +98,17 @@ public class MainProgram implements Initializable {
     @FXML
     private JFXButton btn_NewPackage;
 
+    @FXML
+    private JFXTextField txt_OldPassword;
+
+    @FXML
+    private JFXTextField txt_NewPassword;
+
+    @FXML
+    private JFXTextField txt_ConfirmNewPassword;
+
+    @FXML
+    private JFXButton btn_UpdatePassword;
 
 
 
@@ -107,11 +123,9 @@ public class MainProgram implements Initializable {
         printPackageTable();
         fillPackageDetails(0);
         fillProductSupplier(0);
-
-
-
-
     }
+
+    //public void initData(int id) {agtID = id;}
 
     private void fillProductSupplier(int pos) {
         int pkgId = tbl_Packages.getItems().get(pos).getPackageId();
@@ -343,5 +357,19 @@ public class MainProgram implements Initializable {
         txt_PckDesc.clear();
         txt_PckBasePrice.clear();
         txt_AgencyCommission.clear();
+    }
+
+    @FXML
+    void on_ClickBtnChangePassword(ActionEvent event) {
+        String oldPassword = txt_OldPassword.getText();
+        String newPassword = txt_NewPassword.getText();
+        Integer agentID = Controller.getAgtID();
+        try {
+            AgentManagement.ChangePassword(agentID, oldPassword, newPassword);
+            AlertBox.display("Success", "Password successfully updated.", "OK");
+        } catch (SQLException e) {
+            AlertBox.display("Error", "Database error", "Call tech support");
+            e.printStackTrace();
+        }
     }
 }

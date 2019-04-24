@@ -19,10 +19,22 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import sample.controller.AlertBox;
+import sample.controller.MainProgram;
 import sample.model.Agent;
 import sample.model.AgentManagement;
 
 public class Controller {
+
+    private static Integer agtID;
+    //private Integer agtID;
+
+    public void setAgtID(Integer agtID) {
+        this.agtID = agtID;
+    }
+
+    public static Integer getAgtID() {
+        return agtID;
+    }
 
     @FXML
     private ResourceBundle resources;
@@ -53,13 +65,16 @@ public class Controller {
     @FXML
     void onClick_btnSignIn(ActionEvent event) {
         Parent root = null;
+        Integer agtID = 0;
         String username = txtUser.getText();
         String p = txtPass.getText();
         Agent agent = new Agent();
         agent.setAgtUser(username);
         agent.setAgtPassword(p);
         try {
-            if (AgentManagement.Authenticate(agent) != 0) {
+            agtID = AgentManagement.Authenticate(agent);
+            if (agtID != 0) {
+                setAgtID(agtID);
                 try {
                     root = FXMLLoader.load(getClass().getResource("mainProgram.fxml"));
 
@@ -68,10 +83,13 @@ public class Controller {
                     prevStage.close();
 
                     // Open main program windows
+                    //FXMLLoader loader = new FXMLLoader(getClass().getResource("mainProgram.fxml"));
                     Stage stage = new Stage();
                     stage.setTitle("Travel Expert Agency");
                     stage.setScene(new Scene(root, 1300, 700));
                     //stage.initStyle(StageStyle.UNDECORATED);
+                    //MainProgram mainController = <MainProgram>root.getController();
+                    //mainController.initData(agtID);
                     stage.show();
 
                 } catch (IOException e) {
@@ -83,6 +101,7 @@ public class Controller {
                 AlertBox.display("Error","Incorrect username or password", "Try again");
             }
         } catch (SQLException e) {
+            AlertBox.display("Error","Database error", "Call tech support");
             e.printStackTrace();
         }
         /*try {
