@@ -9,15 +9,15 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import sample.controller.AlertBox;
-import sample.controller.DBHelper;
+import sample.model.Invoice;
 import sample.model.Package;
 
 import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.PreparedStatement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 public class Export {
     public static void ToCSV() {
@@ -77,70 +77,73 @@ public class Export {
         }
     }
 
-    public static void ToPDF() {
-        String filename ="C:\\Users\\801219\\Documents\\Java\\test.pdf";
+    public static void InvoiceToPDF(List<Invoice> toinvoice) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        String filename = System.getProperty("user.home") + "/Downloads/invoice.pdf";
+        String logopath = System.getProperty("user.home") + "/Documents/GitHub/TE_Desktop_Java/src/images/company_logo.png";
+        //String filename ="C:\\Users\\801219\\Documents\\Java\\test.pdf";
+        Double amountDue = 0.00;
+        for (Invoice record : toinvoice) {
+            amountDue += record.getPkgBasePrice() + record.getBasePrice();
+        }
+
         try {
             Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream(filename));
             document.open();
 
             // Logo
-            document.add(Image.getInstance("C:\\Users\\801219\\IdeaProjects\\TE_Desktop_Java\\src\\images\\logo.jpg"));
+            document.add(Image.getInstance(logopath));
 
             document.add(new Paragraph(" "));
 
-            Paragraph para = new Paragraph("Testing PDF export.");
-            document.add(para);
+            Phrase fullname = new Phrase(toinvoice.get(0).getCustFirstName() + " " + toinvoice.get(0).getCustLastName());
+            //Paragraph accountNo = new Paragraph(Integer.toString(toinvoice.get(0).getCustomerId()));
+            Phrase accountNo = new Phrase(Integer.toString(toinvoice.get(0).getCustomerId()) + "");
+            Phrase total = new Phrase(Double.toString(amountDue) + "");
 
-            PdfPTable table = new PdfPTable(5);
-            PdfPCell c1 = new PdfPCell(new Phrase("Heading 1"));
+            document.add(new Paragraph("Name: " + fullname));
+            document.add(new Paragraph("Account No.: " + accountNo));
 
-            /*PdfPTable headerTable=new PdfPTable(5);
-            PdfPCell cellValue = new PdfPCell(new Paragraph("Header 1"));
-            cellValue.setColspan(1);
-            headerTable.addCell(cellValue);
-            cellValue = new PdfPCell(new Paragraph("Header 2"));
-            headerTable.addCell(cellValue);
-            cellValue = new PdfPCell(new Paragraph("Header 3"));
-            headerTable.addCell(cellValue);
-            cellValue = new PdfPCell(new Paragraph("Header 4"));
-            headerTable.addCell(cellValue);
+            PdfPTable table = new PdfPTable(7);
 
-            PdfPTable subHeaderTable = new PdfPTable(3);
-            PdfPCell subHeadingCell = new PdfPCell(new Paragraph("Header 5"));
-            subHeadingCell.setColspan(3);
-            subHeaderTable.addCell(subHeadingCell);
-            subHeaderTable.addCell("Sub heading 1");
-            subHeaderTable.addCell("Sub heading 2");
-            subHeaderTable.addCell("Sub heading 3");
+            PdfPCell h1 = new PdfPCell(new Phrase("Booking No."));
+            table.addCell(h1);
+            PdfPCell h2 = new PdfPCell(new Phrase("Booking Date"));
+            table.addCell(h2);
+            PdfPCell h3 = new PdfPCell(new Phrase("Traveler Count"));
+            table.addCell(h3);
+            PdfPCell h4 = new PdfPCell(new Phrase("Package Name"));
+            table.addCell(h4);
+            PdfPCell h5 = new PdfPCell(new Phrase("Description"));
+            table.addCell(h5);
+            PdfPCell h6 = new PdfPCell(new Phrase("Package Price"));
+            table.addCell(h6);
+            PdfPCell h7 = new PdfPCell(new Phrase("Base Price"));
+            table.addCell(h7);
+            table.setHeaderRows(1);
 
-            headerTable.addCell(subHeaderTable);
-
-            document.add(headerTable);*/
-
-            /*Connection conn = DBHelper.getConnection();
-            String query = "SELECT BookingId, BookingDate, BookingNo FROM bookings";
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-            while (rs.next()) {
-                fw.append(Integer.toString(rs.getInt(1)));
-                fw.append(',');
-                fw.append(rs.getString(2));
-                /*fw.append(',');
-                fw.append(rs.getString(3));
-                fw.append(',');
-                fw.append(rs.getString(4));
-                fw.append('\n');
+            for (Invoice record : toinvoice) {
+                table.addCell(record.getBookingNo());
+                table.addCell(dateFormat.format(record.getBookingDate()));
+                table.addCell(Integer.toString(record.getTravelerCount()));
+                table.addCell(record.getPkgName());
+                table.addCell(record.getDescription());
+                table.addCell(Double.toString(record.getPkgBasePrice()));
+                table.addCell(Double.toString(record.getBasePrice()));
             }
-            conn.close(); */
 
+            document.add(table);
+
+            document.add(new Paragraph("Total amount due: " + total));
 
             document.close();
 
-            AlertBox.display("Success!","CSV File is created successfully.", "OK");
+            AlertBox.display("Success!","Invoice created successfully.", "OK");
         } catch (Exception e) {
-            AlertBox.display("Error","Error creating the file.", "Try again");
+            AlertBox.display("Error","Error creating invoice.", "OK");
             e.printStackTrace();
         }
     }
+
 }
