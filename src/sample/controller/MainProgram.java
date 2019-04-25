@@ -23,9 +23,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
 import sample.Controller;
-import sample.model.AgentManagement;
+import sample.model.*;
 import sample.model.Package;
-import sample.model.ProductSupplier;
 
 import java.net.URL;
 import java.sql.Date;
@@ -48,6 +47,9 @@ public class MainProgram implements Initializable {
 
     @FXML
     private TableView<Package> tbl_Packages;
+
+    @FXML
+    private ListView<Supplier> lst_AllSuppliers;
 
     @FXML
     private JFXTreeTableView<Package> tvPackages;
@@ -77,7 +79,13 @@ public class MainProgram implements Initializable {
     private Pane pan_settings;
 
     @FXML
+    private ListView<ProductSupplier> lst_AllProdSup;
+
+    @FXML
     private JFXTextField txt_PackageName;
+
+    @FXML
+    private ListView<Product> lst_AllProducts;
 
     @FXML
     private JFXTextField txt_search;
@@ -121,6 +129,9 @@ public class MainProgram implements Initializable {
 
     @FXML
     private JFXDatePicker txt_PckEndDate;
+
+    @FXML
+    private JFXButton btn_LinkProdSup;
 
 
 
@@ -411,6 +422,38 @@ public class MainProgram implements Initializable {
         pan_products.setVisible(true);
         pan_settings.setVisible(false);
         pan_packages.setVisible(false);
+        loadProducts();
+        loadSuppliers();
+        loadProdSupLinked();
+    }
+
+    private void loadProdSupLinked() {
+        List<ProductSupplier> prodSupList = PackagesDB.getAllProductSupplierLinked();
+        lst_AllProdSup.getItems().clear();
+        for(ProductSupplier pdsp : prodSupList)
+        {
+            lst_AllProdSup.getItems().add(pdsp);
+        }
+    }
+
+    private void loadSuppliers() {
+        List<Supplier> supList = SupplierDB.getAllSupplier();
+        lst_AllSuppliers.getItems().clear();
+        for(Supplier su : supList)
+        {
+            lst_AllSuppliers.getItems().add(su);
+        }
+    }
+
+    private void loadProducts() {
+        List<Product> prodList = ProductDB.getAllProducts();
+
+        lst_AllProducts.getItems().clear();
+
+        for (Product pd : prodList)
+        {
+            lst_AllProducts.getItems().add(pd);
+        }
     }
 
     @FXML
@@ -512,8 +555,17 @@ public class MainProgram implements Initializable {
         String newPassword = txt_NewPassword.getText();
         Integer agentID = Controller.getAgtID();
         try {
-            AgentManagement.ChangePassword(agentID, oldPassword, newPassword);
-            AlertBox.display("Success", "Password successfully updated.", "OK");
+            if((Validator.isFilled(txt_OldPassword,"Current Password")) &&
+                    (Validator.isFilled(txt_NewPassword,"New Password")) &&
+                    (Validator.isFilled(txt_ConfirmNewPassword,"Confirmation Password")))
+            {
+                if (AgentManagement.ChangePassword(agentID, oldPassword, newPassword)) {
+                    AlertBox.display("Success", "Password successfully updated.", "OK");
+                }else
+                {
+                    AlertBox.display("Error", "The current Password is incorrect", "OK");
+                }
+            }
         } catch (SQLException e) {
             AlertBox.display("Error", "Database error", "Call tech support");
             e.printStackTrace();
@@ -523,5 +575,25 @@ public class MainProgram implements Initializable {
     @FXML
     void on_ClickBtnLogout(MouseEvent event) {
         System.exit(0);
+    }
+
+    @FXML
+    void on_ClickBtnLinkProdSup(ActionEvent event) {
+        Product prodSel = lst_AllProducts.getSelectionModel().getSelectedItem();
+        Supplier supSel = lst_AllSuppliers.getSelectionModel().getSelectedItem();
+
+        if (prodSel==null){
+            AlertBox.display("Error","You must select one Product from the list","OK");
+        }
+        else if (supSel == null) {
+            AlertBox.display("Error","You must select one Product from the list","OK");
+        }
+        else if (!PackagesDB.isProductSupplierReady(prodSel.getProductId(),supSel.getSupplierId())){
+            AlertBox.display("Error","The relationship already exist","OK");
+        }else
+        {
+            AlertBox.display("Success","The relationship was created","OK");
+        }
+
     }
 }

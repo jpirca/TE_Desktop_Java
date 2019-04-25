@@ -18,9 +18,21 @@
 
 <AnchorPane fx:id="txt_packageID" prefHeight="691.0" prefWidth="1167.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.MainProgram">
    <children>
-      <Pane fx:id="pan_products" layoutX="210.0" prefHeight="687.0" prefWidth="957.0" style="-fx-background-color: BLUE;" visible="false">
+      <Pane fx:id="pan_products" layoutX="210.0" prefHeight="687.0" prefWidth="957.0" style="-fx-background-color: WHITE; -fx-background-radius: 30; -fx-border-radius: 30; -fx-border-color: GRAY; -fx-border-width: 5;" visible="false">
          <children>
-            <Label text="Products" />
+            <Label layoutX="80.0" layoutY="25.0" prefHeight="54.0" prefWidth="530.0" text="PRODUCTS &amp; SUPPLIERS" textOverrun="CENTER_WORD_ELLIPSIS" underline="true">
+               <font>
+                  <Font name="Verdana Bold" size="43.0" />
+               </font>
+            </Label>
+            <ListView fx:id="lst_AllProducts" layoutX="35.0" layoutY="109.0" prefHeight="155.0" prefWidth="235.0" />
+            <ListView fx:id="lst_AllSuppliers" layoutX="506.0" layoutY="108.0" prefHeight="155.0" prefWidth="193.0" />
+            <ListView fx:id="lst_AllProdSup" layoutX="203.0" layoutY="392.0" prefHeight="168.0" prefWidth="370.0" />
+            <JFXButton fx:id="btn_LinkProdSup" layoutX="355.0" layoutY="187.0" onAction="#on_ClickBtnLinkProdSup" prefHeight="35.0" prefWidth="108.0" style="-fx-background-color: #c5c0c0;" text="LINK" textAlignment="CENTER">
+               <font>
+                  <Font name="Verdana" size="14.0" />
+               </font>
+            </JFXButton>
          </children>
       </Pane>
       <AnchorPane fx:id="panMenu" prefHeight="600.0" prefWidth="210.0">
@@ -169,15 +181,24 @@
             </JFXButton>
          </children>
       </Pane>
-      <Pane fx:id="pan_settings" layoutX="210.0" prefHeight="687.0" prefWidth="957.0" visible="false">
+      <Pane fx:id="pan_settings" layoutX="210.0" prefHeight="687.0" prefWidth="957.0" style="-fx-background-color: WHITE; -fx-background-radius: 30; -fx-border-radius: 30; -fx-border-color: GRAY; -fx-border-width: 5;" visible="false">
          <children>
-            <Label layoutX="28.0" layoutY="119.0" prefHeight="34.0" prefWidth="139.0" text="Old Password" />
-            <Label layoutX="100.0" layoutY="169.0" prefHeight="27.0" prefWidth="67.0" text="New Password" />
-            <Label layoutX="42.0" layoutY="214.0" prefHeight="34.0" prefWidth="125.0" text="Confirm New Password" />
-            <JFXTextField fx:id="txt_OldPassword" layoutX="172.0" layoutY="120.0" prefHeight="34.0" prefWidth="210.0" text="Old Password" />
-            <JFXTextField fx:id="txt_NewPassword" layoutX="173.0" layoutY="169.0" prefHeight="28.0" prefWidth="210.0" text="New Password" />
-            <JFXTextField fx:id="txt_ConfirmNewPassword" layoutX="172.0" layoutY="214.0" prefHeight="34.0" prefWidth="210.0" text="Confirm New Password" />
-            <JFXButton layoutX="249.0" layoutY="270.0" onAction="#on_ClickBtnChangePassword" prefHeight="34.0" prefWidth="139.0" style="-fx-background-color: #c5c0c0;" text="Change Password">
+            <Label layoutX="150.0" layoutY="160.0" prefHeight="35.0" prefWidth="200.0" text="Old Password" textAlignment="RIGHT">
+               <font>
+                  <Font name="Verdana" size="16.0" />
+               </font></Label>
+            <Label layoutX="150.0" layoutY="210.0" prefHeight="35.0" prefWidth="200.0" text="New Password" textAlignment="RIGHT">
+               <font>
+                  <Font name="Verdana" size="16.0" />
+               </font></Label>
+            <Label layoutX="150.0" layoutY="260.0" prefHeight="35.0" prefWidth="200.0" text="Confirm New Password" textAlignment="RIGHT">
+               <font>
+                  <Font name="Verdana" size="16.0" />
+               </font></Label>
+            <JFXTextField fx:id="txt_OldPassword" accessibleRole="PASSWORD_FIELD" layoutX="386.0" layoutY="160.0" prefHeight="35.0" prefWidth="270.0" />
+            <JFXTextField fx:id="txt_NewPassword" accessibleRole="PASSWORD_FIELD" layoutX="386.0" layoutY="210.0" prefHeight="35.0" prefWidth="270.0" />
+            <JFXTextField fx:id="txt_ConfirmNewPassword" accessibleRole="PASSWORD_FIELD" layoutX="386.0" layoutY="260.0" prefHeight="35.0" prefWidth="270.0" />
+            <JFXButton layoutX="539.0" layoutY="330.0" onAction="#on_ClickBtnChangePassword" prefHeight="34.0" prefWidth="118.0" style="-fx-background-color: #c5c0c0;" text="Change Password">
                <font>
                   <Font name="Verdana" size="13.0" />
                </font>

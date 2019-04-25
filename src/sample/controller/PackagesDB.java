@@ -208,4 +208,63 @@ public class PackagesDB {
         return true;
     }
 
+    public static List<ProductSupplier> getAllProductSupplierLinked()
+    {
+        List<ProductSupplier> listPS = new ArrayList<>();
+        Connection conn = DBHelper.getConnection();
+        String sql = "SELECT tb.ProductSupplierId, tb.ProductId, tc.ProdName, tb.SupplierId, td.SupName " +
+                "FROM products_suppliers as tb  " +
+                "INNER JOIN products as tc ON (tc.ProductId = tb.ProductId) " +
+                "INNER JOIN suppliers as td ON (td.SupplierId = tb.SupplierId) " +
+                "ORDER BY tb.ProductId";
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next())
+            {
+                ProductSupplier ps = new ProductSupplier(rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getString(3),
+                        rs.getInt(4),
+                        rs.getString(5));
+
+                listPS.add(ps);
+            }
+            rs.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listPS;
+    }
+
+    public static boolean isProductSupplierReady(int productId, int supplierId)
+    {
+        Connection conn = DBHelper.getConnection();
+        String sql = "SELECT ProductSupplierId FROM products_suppliers WHERE ProductId = ? AND SupplierId = ?";
+        try{
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1,productId);
+            stmt.setInt(2,supplierId);
+            ResultSet rs = stmt.executeQuery();
+
+            int numRows = rs.getFetchSize();
+            rs.close();
+            conn.close();
+
+            if (numRows == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
