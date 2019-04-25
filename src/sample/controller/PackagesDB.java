@@ -241,6 +241,7 @@ public class PackagesDB {
 
     public static boolean isProductSupplierReady(int productId, int supplierId)
     {
+        boolean result = true;
         Connection conn = DBHelper.getConnection();
         String sql = "SELECT ProductSupplierId FROM products_suppliers WHERE ProductId = ? AND SupplierId = ?";
         try{
@@ -249,22 +250,93 @@ public class PackagesDB {
             stmt.setInt(2,supplierId);
             ResultSet rs = stmt.executeQuery();
 
-            int numRows = rs.getFetchSize();
+            if (rs.next())
+            {
+                result = false;
+            }
             rs.close();
             conn.close();
-
-            if (numRows == 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
 
         }catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return result;
+    }
+
+    public static boolean insertProdSupLink(int productId, int supplierId)
+    {
+        boolean result = false;
+        Connection conn = DBHelper.getConnection();
+        String sql = "INSERT INTO products_suppliers (ProductId,SupplierId) VALUES (?,?)";
+        try{
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1,productId);
+            stmt.setInt(2,supplierId);
+            int rows = stmt.executeUpdate();
+            if (rows == 0){
+                AlertBox.display("Error","There was an error creating the relationship. Please try later","OK");
+                result = false;
+            }
+            else
+            {
+                result = true;
+            }
+            conn.close();
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static boolean deleteProdSupLink(int prodSupId)
+    {
+        boolean result = false;
+        Connection conn = DBHelper.getConnection();
+        String sql = "DELETE FROM products_suppliers WHERE ProductSupplierId=?";
+        try{
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1,prodSupId);
+            int rows = stmt.executeUpdate();
+            if (rows == 0){
+                AlertBox.display("Error","There was an error creating the relationship. Please try later","OK");
+                result = false;
+            }
+            else
+            {
+                result = true;
+            }
+            conn.close();
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static boolean checkProdSupPkg(int prodSupId)
+    {
+        boolean result = false;
+        Connection conn = DBHelper.getConnection();
+        String sql = "SELECT * FROM packages_products_suppliers WHERE ProductSupplierId=?";
+        try{
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1,prodSupId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next())
+            {
+                result = true;
+            }
+            else
+            {
+                result = false;
+            }
+            rs.close();
+            conn.close();
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }
