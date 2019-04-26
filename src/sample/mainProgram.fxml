@@ -181,6 +181,19 @@
                               </JFXButton>
                               <JFXDatePicker fx:id="txt_PckEndDate" defaultColor="#b3bab9" editable="false" layoutX="85.0" layoutY="113.0" prefHeight="25.0" prefWidth="170.0" />
                               <JFXDatePicker fx:id="txt_PckStartDate" defaultColor="#b4bcbb" editable="false" layoutX="85.0" layoutY="77.0" prefHeight="28.0" prefWidth="170.0" />
+                              <JFXButton fx:id="btn_DelPackage" layoutX="660.0" layoutY="110.0" onAction="#on_ClickBtnDelPackage" prefHeight="26.0" prefWidth="92.0" style="-fx-background-color: #c5c0c0;" text="Delete">
+                                 <font>
+                                    <Font name="Verdana" size="13.0" />
+                                 </font>
+                                 <ripplerFill>
+                                    <RadialGradient centerX="0.5" centerY="0.49523809523809526" radius="0.5">
+                                       <stops>
+                                          <Stop color="#9b9dae" />
+                                          <Stop color="WHITE" offset="1.0" />
+                                       </stops>
+                                    </RadialGradient>
+                                 </ripplerFill>
+                              </JFXButton>
                            </children>
                         </AnchorPane>
                      </content>

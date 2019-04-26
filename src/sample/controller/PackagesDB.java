@@ -299,7 +299,7 @@ public class PackagesDB {
             stmt.setInt(1,prodSupId);
             int rows = stmt.executeUpdate();
             if (rows == 0){
-                AlertBox.display("Error","There was an error creating the relationship. Please try later","OK");
+                AlertBox.display("Error","There was an error. Please try later","OK");
                 result = false;
             }
             else
@@ -332,6 +332,57 @@ public class PackagesDB {
                 result = false;
             }
             rs.close();
+            conn.close();
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static boolean checkPackagesOnProdSup(int pkgId)
+    {
+        boolean result = true;
+        Connection conn = DBHelper.getConnection();
+        String sql = "SELECT * FROM packages_products_suppliers WHERE PackageId = ?";
+        try{
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1,pkgId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next())
+            {
+                result = true;
+            }
+            else
+            {
+                result = false;
+            }
+            rs.close();
+            conn.close();
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static boolean deletePackage(int pkgId)
+    {
+        boolean result = false;
+        Connection conn = DBHelper.getConnection();
+        String sql = "DELETE FROM packages WHERE PackageId=?";
+        try{
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1,pkgId);
+            int rows = stmt.executeUpdate();
+            if (rows == 0){
+                AlertBox.display("Error","There was an error. Please try later","OK");
+                result = false;
+            }
+            else
+            {
+                result = true;
+            }
             conn.close();
 
         }catch (SQLException e) {
