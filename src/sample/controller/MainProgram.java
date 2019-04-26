@@ -26,6 +26,13 @@ import sample.Controller;
 import sample.model.*;
 import sample.model.Package;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -36,6 +43,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
@@ -846,5 +854,79 @@ public class MainProgram implements Initializable {
         else{
             AlertBox.display("Error","You must select a package first","OK");
         }
+    }
+
+    private void sendEmail(String emailList)
+    {
+        final String username = "japirca@gmail.com";
+        final String password = "Sait2019";
+
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host", "smtp.gmail.com");
+        prop.put("mail.smtp.port", "587");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true"); //TLS
+
+        Multipart multipart = new MimeMultipart();
+        MimeBodyPart attachementPart = new MimeBodyPart();
+        try {
+            attachementPart.attachFile(new File("C:/Users/730134/Downloads/invoice.pdf"));
+            multipart.addBodyPart(attachementPart);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+
+        Session session = Session.getInstance(prop,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
+
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("japirca@gmail.com"));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(emailList)
+            );
+            message.setSubject("Your invoice");
+            message.setText("Dear Customer,"
+                    + "\n\n We are sending the current invoice");
+
+            message.setContent(multipart);
+
+            Transport.send(message);
+
+            System.out.println("Done");
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void on_ClickSendInvoiceEmail(ActionEvent event) {
+        int position = tbl_Customers.getSelectionModel().selectedIndexProperty().get();
+        if (position != -1) {
+            int custID = customerList.get(position).getCustomerID();
+            List<Invoice> custAccount = InvoiceDB.GetCustomerAccount(custID);
+            if (custAccount.isEmpty()) {
+                AlertBox.display("Error","This customer has no purchased packages on record.","OK");
+            }
+            else {
+                Export.InvoiceToPDF(custAccount);
+                sendEmail(customerList.get(position).getCustEmail());
+            }
+        }
+        else {
+            AlertBox.display("Error", "Please select a customer from the table.", "OK");
+        }
+
+
     }
 }

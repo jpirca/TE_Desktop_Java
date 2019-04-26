@@ -24,7 +24,7 @@
                   <Font name="Verdana" size="14.0" />
                </font>
             </JFXPasswordField>
-            <JFXButton fx:id="btnSignIn" layoutX="24.0" layoutY="216.0" onAction="#onClick_btnSignIn" prefHeight="25.0" prefWidth="260.0" style="-fx-background-color: #ff6666;" text="Sign In" textFill="WHITE">
+            <JFXButton fx:id="btnSignIn" defaultButton="true" layoutX="24.0" layoutY="216.0" onAction="#onClick_btnSignIn" prefHeight="25.0" prefWidth="260.0" style="-fx-background-color: #ff6666;" text="Sign In" textFill="WHITE">
                <font>
                   <Font size="15.0" />
                </font>
