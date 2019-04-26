@@ -81,29 +81,26 @@ public class Export {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
         String filename = System.getProperty("user.home") + "/Downloads/invoice.pdf";
         String logopath = System.getProperty("user.home") + "/Documents/GitHub/TE_Desktop_Java/src/images/company_logo.png";
-        //String filename ="C:\\Users\\801219\\Documents\\Java\\test.pdf";
         Double amountDue = 0.00;
         for (Invoice record : toinvoice) {
             amountDue += record.getPkgBasePrice() + record.getBasePrice();
         }
 
         try {
+            Image img = Image.getInstance(logopath);
+            img.setWidthPercentage(40);
+            img.setScaleToFitHeight(true);
             Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream(filename));
             document.open();
 
             // Logo
-            document.add(Image.getInstance(logopath));
+            document.add(img);
 
             document.add(new Paragraph(" "));
 
-            Phrase fullname = new Phrase(toinvoice.get(0).getCustFirstName() + " " + toinvoice.get(0).getCustLastName());
-            Paragraph accountNo = new Paragraph(Integer.toString(toinvoice.get(0).getCustomerId()));
-            //Phrase accountNo = new Phrase(Integer.toString(toinvoice.get(0).getCustomerId()));
-            Phrase total = new Phrase(Double.toString(amountDue));
-
-            document.add(new Paragraph("Name: " + fullname));
-            document.add(new Paragraph("Account No.: " + accountNo));
+            document.add(new Paragraph("Name: " + toinvoice.get(0).getCustFirstName() + " " + toinvoice.get(0).getCustLastName()));
+            document.add(new Paragraph("Account No: " + toinvoice.get(0).getCustomerId()));
 
             document.add(new Paragraph(" "));
 
@@ -137,7 +134,9 @@ public class Export {
 
             document.add(table);
 
-            document.add(new Paragraph("Total amount due: " + total));
+            document.add(new Paragraph(" "));
+
+            document.add(new Paragraph("Total amount due: " + "$ " + amountDue + "0"));
 
             document.close();
 
