@@ -51,9 +51,9 @@ public class MainProgram implements Initializable {
     private TableView<Package> tbl_Packages;
 
     @FXML
-
     private TableView<Customer> tbl_Customers;
-  
+
+    @FXML
     private ListView<Supplier> lst_AllSuppliers;
 
 
@@ -90,6 +90,7 @@ public class MainProgram implements Initializable {
     @FXML
     private Pane pan_invoice;
 
+    @FXML
     private ListView<ProductSupplier> lst_AllProdSup;
 
 
