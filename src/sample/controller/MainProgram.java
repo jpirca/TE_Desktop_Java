@@ -203,6 +203,8 @@ public class MainProgram implements Initializable {
             });
             SortedList<Package> sortedList = new SortedList<>(fl);
             sortedList.comparatorProperty().bind(tbl_Packages.comparatorProperty());
+            //packageList.clear();
+            packageList = sortedList;
             tbl_Packages.setItems(sortedList);
         });
     }
@@ -396,7 +398,7 @@ public class MainProgram implements Initializable {
 
     @FXML
     void on_ClickBtnExport(MouseEvent event) {
-        Export.ToCSV();
+        Export.ToCSV(packageList);
     }
 
     @FXML
@@ -817,6 +819,32 @@ public class MainProgram implements Initializable {
                 AlertBox.display("Success", "The Supplier was deleted", "OK");
                 loadSuppliers();
             }
+        }
+    }
+
+    @FXML
+    void on_ClickBtnDelPackage(ActionEvent event) {
+        if((txt_PackageID.getText()!=null) && (!txt_PackageID.getText().isEmpty()))
+        {
+            if(!PackagesDB.checkPackagesOnProdSup(Integer.parseInt(txt_PackageID.getText())))
+            {
+                if(PackagesDB.deletePackage(Integer.parseInt(txt_PackageID.getText())))
+                {
+                    AlertBox.display("Success","The Package was delete","OK");
+                    printPackageTable();
+                    fillPackageDetails(0);
+                    fillProductSupplier(0);
+                    fillProductSupplierAva(0);
+                    createTableFilter();
+                }
+            }
+            else
+            {
+                AlertBox.display("Error","The package contains Products/Suppliers, please remove them first","OK");
+            }
+        }
+        else{
+            AlertBox.display("Error","You must select a package first","OK");
         }
     }
 }

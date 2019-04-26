@@ -20,13 +20,13 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class Export {
-    public static void ToCSV() {
-        ObservableList<Package> packageList = FXCollections.observableArrayList();
+    public static void ToCSV(ObservableList<Package> packageList) {
+        //ObservableList<Package> packageList = FXCollections.observableArrayList();
         String filename = System.getProperty("user.home") + "/Downloads/package.csv";
 
         try {
             FileWriter fw = new FileWriter(filename);
-            packageList = PackagesDB.getAllPackage();
+            //packageList = PackagesDB.getAllPackage();
             for(Package pck:packageList)
             {
                 fw.append(pck.getPackageId().toString());
