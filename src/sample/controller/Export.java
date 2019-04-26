@@ -60,7 +60,7 @@ public class Export {
     public static void InvoiceToPDF(List<Invoice> toinvoice) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
         String filename = System.getProperty("user.home") + "/Downloads/invoice.pdf";
-        String logopath = System.getProperty("user.dir") + "/src/images/company_logo.png";
+        String logopath = System.getProperty("user.dir") + "/TravelExpertDesktop_Java/src/images/company_logo.png";
         Double amountDue = 0.00;
         for (Invoice record : toinvoice) {
             amountDue += record.getPkgBasePrice() + record.getBasePrice();
