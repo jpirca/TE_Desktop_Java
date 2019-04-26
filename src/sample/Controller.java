@@ -86,7 +86,7 @@ public class Controller {
                     //FXMLLoader loader = new FXMLLoader(getClass().getResource("mainProgram.fxml"));
                     Stage stage = new Stage();
                     stage.setTitle("Travel Expert Agency");
-                    stage.setScene(new Scene(root, 1300, 700));
+                    stage.setScene(new Scene(root, 1200, 700));
                     //stage.initStyle(StageStyle.UNDECORATED);
                     //MainProgram mainController = <MainProgram>root.getController();
                     //mainController.initData(agtID);
