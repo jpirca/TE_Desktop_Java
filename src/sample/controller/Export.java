@@ -105,6 +105,9 @@ public class Export {
             document.add(new Paragraph(" "));
 
             PdfPTable table = new PdfPTable(7);
+            //table.setTotalWidth(1200);
+            //table.setWidths(new int[]{10, 15, 10, 20, 25, 10, 10});
+            table.setWidths(new float[]{120, 140, 100, 150, 200, 140, 90});
 
             PdfPCell h1 = new PdfPCell(new Phrase("Booking No."));
             table.addCell(h1);
