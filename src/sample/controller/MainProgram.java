@@ -314,13 +314,13 @@ public class MainProgram implements Initializable {
         colFirstName.setCellValueFactory(new PropertyValueFactory<Customer,String>("CustFirstName"));
 
         // Column Last Name
-        TableColumn<Customer,String> colLastName = new TableColumn<>("First Name");
+        TableColumn<Customer,String> colLastName = new TableColumn<>("Last Name");
         colLastName.setPrefWidth(140.00);
         colLastName.setCellValueFactory(new PropertyValueFactory<Customer,String>("CustLastName"));
 
         // Column Address
         TableColumn<Customer,String> colAddress = new TableColumn<>("Address");
-        colAddress.setPrefWidth(90.00);
+        colAddress.setPrefWidth(140.00);
         colAddress.setCellValueFactory(new PropertyValueFactory<Customer,String>("CustAddress"));
 
         // Column City
@@ -330,32 +330,32 @@ public class MainProgram implements Initializable {
 
         // Column Province
         TableColumn<Customer,String> colProvince = new TableColumn<>("Province");
-        colProvince.setPrefWidth(280.00);
+        colProvince.setPrefWidth(30.00);
         colProvince.setCellValueFactory(new PropertyValueFactory<Customer,String>("CustProvince"));
 
         // Column Postal Code
         TableColumn<Customer,String> colPostalCode = new TableColumn<>("Postal Code");
-        colPostalCode.setPrefWidth(100.00);
+        colPostalCode.setPrefWidth(70.00);
         colPostalCode.setCellValueFactory(new PropertyValueFactory<Customer,String>("CustPostalCode"));
 
         // Column Country
         TableColumn<Customer,String> colCountry = new TableColumn<>("Country");
-        colCountry.setPrefWidth(100.00);
+        colCountry.setPrefWidth(90.00);
         colCountry.setCellValueFactory(new PropertyValueFactory<Customer,String>("CustCountry"));
 
         // Column Home Phone
         TableColumn<Customer,String> colHomePhone = new TableColumn<>("Home Phone");
-        colHomePhone.setPrefWidth(100.00);
+        colHomePhone.setPrefWidth(90.00);
         colHomePhone.setCellValueFactory(new PropertyValueFactory<Customer,String>("CustHomePhone"));
 
         // Column Business Phone
         TableColumn<Customer,String> colBusinessPhone = new TableColumn<>("Business Phone");
-        colBusinessPhone.setPrefWidth(100.00);
+        colBusinessPhone.setPrefWidth(90.00);
         colBusinessPhone.setCellValueFactory(new PropertyValueFactory<Customer,String>("CustBusinessPhone"));
 
         // Column Email
         TableColumn<Customer,String> colEmail = new TableColumn<>("Email");
-        colEmail.setPrefWidth(100.00);
+        colEmail.setPrefWidth(140.00);
         colEmail.setCellValueFactory(new PropertyValueFactory<Customer,String>("CustEmail"));
 
         // Adding list with customers to the table

@@ -98,12 +98,14 @@ public class Export {
             document.add(new Paragraph(" "));
 
             Phrase fullname = new Phrase(toinvoice.get(0).getCustFirstName() + " " + toinvoice.get(0).getCustLastName());
-            //Paragraph accountNo = new Paragraph(Integer.toString(toinvoice.get(0).getCustomerId()));
-            Phrase accountNo = new Phrase(Integer.toString(toinvoice.get(0).getCustomerId()) + "");
-            Phrase total = new Phrase(Double.toString(amountDue) + "");
+            Paragraph accountNo = new Paragraph(Integer.toString(toinvoice.get(0).getCustomerId()));
+            //Phrase accountNo = new Phrase(Integer.toString(toinvoice.get(0).getCustomerId()));
+            Phrase total = new Phrase(Double.toString(amountDue));
 
             document.add(new Paragraph("Name: " + fullname));
             document.add(new Paragraph("Account No.: " + accountNo));
+
+            document.add(new Paragraph(" "));
 
             PdfPTable table = new PdfPTable(7);
 
