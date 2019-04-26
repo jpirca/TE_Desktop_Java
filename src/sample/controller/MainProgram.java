@@ -45,11 +45,17 @@ public class MainProgram implements Initializable {
 
     ObservableList<Package> packageList = FXCollections.observableArrayList();
 
+    ObservableList<Customer> customerList = FXCollections.observableArrayList();
+
     @FXML
     private TableView<Package> tbl_Packages;
 
     @FXML
+
+    private TableView<Customer> tbl_Customers;
+  
     private ListView<Supplier> lst_AllSuppliers;
+
 
     @FXML
     private JFXTreeTableView<Package> tvPackages;
@@ -70,6 +76,9 @@ public class MainProgram implements Initializable {
     private ImageView img_btn_logout;
 
     @FXML
+    private ImageView img_btn_invoice;
+
+    @FXML
     private Pane pan_packages;
 
     @FXML
@@ -79,7 +88,10 @@ public class MainProgram implements Initializable {
     private Pane pan_settings;
 
     @FXML
+    private Pane pan_invoice;
+
     private ListView<ProductSupplier> lst_AllProdSup;
+
 
     @FXML
     private JFXTextField txt_PackageName;
@@ -161,6 +173,7 @@ public class MainProgram implements Initializable {
         styleMenuButtons(img_btn_logout);
         // Call method to print the package table
         printPackageTable();
+        printCustomerTable();
         fillPackageDetails(0);
         fillProductSupplier(0);
         fillProductSupplierAva(0);
@@ -314,9 +327,93 @@ public class MainProgram implements Initializable {
         fillProductSupplierAva(position);
     }
 
+    private void printCustomerTable() {
+
+        customerList = CustomerDB.getAllCustomers();
+
+        // Column: ID
+        TableColumn<Customer,Integer> colCustomerId = new TableColumn<>("ID");
+        colCustomerId.setPrefWidth(30.00);
+        colCustomerId.setCellValueFactory(new PropertyValueFactory<Customer,Integer>("CustomerID"));
+
+        // Column First Name
+        TableColumn<Customer,String> colFirstName = new TableColumn<>("First Name");
+        colFirstName.setPrefWidth(140.00);
+        colFirstName.setCellValueFactory(new PropertyValueFactory<Customer,String>("CustFirstName"));
+
+        // Column Last Name
+        TableColumn<Customer,String> colLastName = new TableColumn<>("Last Name");
+        colLastName.setPrefWidth(140.00);
+        colLastName.setCellValueFactory(new PropertyValueFactory<Customer,String>("CustLastName"));
+
+        // Column Address
+        TableColumn<Customer,String> colAddress = new TableColumn<>("Address");
+        colAddress.setPrefWidth(140.00);
+        colAddress.setCellValueFactory(new PropertyValueFactory<Customer,String>("CustAddress"));
+
+        // Column City
+        TableColumn<Customer,String> colCity = new TableColumn<>("City");
+        colCity.setPrefWidth(90.00);
+        colCity.setCellValueFactory(new PropertyValueFactory<Customer,String>("CustCity"));
+
+        // Column Province
+        TableColumn<Customer,String> colProvince = new TableColumn<>("Province");
+        colProvince.setPrefWidth(30.00);
+        colProvince.setCellValueFactory(new PropertyValueFactory<Customer,String>("CustProvince"));
+
+        // Column Postal Code
+        TableColumn<Customer,String> colPostalCode = new TableColumn<>("Postal Code");
+        colPostalCode.setPrefWidth(70.00);
+        colPostalCode.setCellValueFactory(new PropertyValueFactory<Customer,String>("CustPostalCode"));
+
+        // Column Country
+        TableColumn<Customer,String> colCountry = new TableColumn<>("Country");
+        colCountry.setPrefWidth(90.00);
+        colCountry.setCellValueFactory(new PropertyValueFactory<Customer,String>("CustCountry"));
+
+        // Column Home Phone
+        TableColumn<Customer,String> colHomePhone = new TableColumn<>("Home Phone");
+        colHomePhone.setPrefWidth(90.00);
+        colHomePhone.setCellValueFactory(new PropertyValueFactory<Customer,String>("CustHomePhone"));
+
+        // Column Business Phone
+        TableColumn<Customer,String> colBusinessPhone = new TableColumn<>("Business Phone");
+        colBusinessPhone.setPrefWidth(90.00);
+        colBusinessPhone.setCellValueFactory(new PropertyValueFactory<Customer,String>("CustBusinessPhone"));
+
+        // Column Email
+        TableColumn<Customer,String> colEmail = new TableColumn<>("Email");
+        colEmail.setPrefWidth(140.00);
+        colEmail.setCellValueFactory(new PropertyValueFactory<Customer,String>("CustEmail"));
+
+        // Adding list with customers to the table
+        tbl_Customers.setItems(customerList);
+        // Adding column title to the table
+        tbl_Customers.getColumns().addAll(colCustomerId, colFirstName, colLastName, colAddress, colCity, colProvince,
+                colPostalCode, colCountry, colHomePhone, colBusinessPhone, colEmail);
+    }
+
     @FXML
     void on_ClickBtnExport(MouseEvent event) {
         Export.ToCSV();
+    }
+
+    @FXML
+    void on_ClickBtnInvoice(MouseEvent event) {
+        int position = tbl_Customers.getSelectionModel().selectedIndexProperty().get();
+        if (position != -1) {
+            int custID = customerList.get(position).getCustomerID();
+            List<Invoice> custAccount = InvoiceDB.GetCustomerAccount(custID);
+            if (custAccount.isEmpty()) {
+                AlertBox.display("Error","This customer has no purchased packages on record.","OK");
+            }
+            else {
+                Export.InvoiceToPDF(custAccount);
+            }
+        }
+        else {
+            AlertBox.display("Error", "Please select a customer from the table.", "OK");
+        }
     }
 
     @FXML
@@ -426,10 +523,21 @@ public class MainProgram implements Initializable {
     }
 
     @FXML
+    void on_MouseEntered_Invoice(MouseEvent event) {
+        styleMenuButtonsIn(img_btn_invoice);
+    }
+
+    @FXML
+    void on_MouseExit_Invoice(MouseEvent event) {
+        styleMenuButtonsOut(img_btn_invoice);
+    }
+
+    @FXML
     void on_ClickPackage(MouseEvent event) {
         pan_packages.setVisible(true);
         pan_settings.setVisible(false);
         pan_products.setVisible(false);
+        pan_invoice.setVisible(false);
     }
 
     @FXML
@@ -437,6 +545,9 @@ public class MainProgram implements Initializable {
         pan_products.setVisible(true);
         pan_settings.setVisible(false);
         pan_packages.setVisible(false);
+
+        pan_invoice.setVisible(false);
+
         loadProducts();
         loadSuppliers();
         loadProdSupLinked();
@@ -469,6 +580,7 @@ public class MainProgram implements Initializable {
         {
             lst_AllProducts.getItems().add(pd);
         }
+
     }
 
     @FXML
@@ -476,6 +588,15 @@ public class MainProgram implements Initializable {
         pan_settings.setVisible(true);
         pan_products.setVisible(false);
         pan_packages.setVisible(false);
+        pan_invoice.setVisible(false);
+    }
+
+    @FXML
+    void on_ClickInvoice(MouseEvent event) {
+        pan_settings.setVisible(false);
+        pan_products.setVisible(false);
+        pan_packages.setVisible(false);
+        pan_invoice.setVisible(true);
     }
 
     @FXML

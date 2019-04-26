@@ -46,7 +46,7 @@
             <Image url="@../images/flight.jpg" />
          </image>
       </ImageView>
-      <Label layoutX="28.0" layoutY="118.0" prefHeight="110.0" prefWidth="291.0" text="Welcome to Travel Expert Agency" textFill="WHITE" wrapText="true">
+      <Label layoutX="28.0" layoutY="118.0" prefHeight="110.0" prefWidth="291.0" text="Welcome to Travel Experts Agency" textFill="WHITE" wrapText="true">
          <font>
             <Font name="Verdana" size="31.0" />
          </font>
