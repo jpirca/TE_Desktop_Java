@@ -262,7 +262,7 @@ public class MainProgram implements Initializable {
 
 
     private void printPackageTable() {
-
+        // getting all packages
         packageList = PackagesDB.getAllPackage();
 
         // Column: ID
