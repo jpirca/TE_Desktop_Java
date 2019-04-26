@@ -51,7 +51,11 @@ public class MainProgram implements Initializable {
     private TableView<Package> tbl_Packages;
 
     @FXML
+
     private TableView<Customer> tbl_Customers;
+  
+    private ListView<Supplier> lst_AllSuppliers;
+
 
     @FXML
     private JFXTreeTableView<Package> tvPackages;
@@ -86,8 +90,14 @@ public class MainProgram implements Initializable {
     @FXML
     private Pane pan_invoice;
 
+    private ListView<ProductSupplier> lst_AllProdSup;
+
+
     @FXML
     private JFXTextField txt_PackageName;
+
+    @FXML
+    private ListView<Product> lst_AllProducts;
 
     @FXML
     private JFXTextField txt_search;
@@ -111,14 +121,13 @@ public class MainProgram implements Initializable {
     private JFXButton btn_NewPackage;
 
     @FXML
-
-    private JFXTextField txt_OldPassword;
-
-    @FXML
-    private JFXTextField txt_NewPassword;
+    private JFXPasswordField txt_OldPassword;
 
     @FXML
-    private JFXTextField txt_ConfirmNewPassword;
+    private JFXPasswordField txt_NewPassword;
+
+    @FXML
+    private JFXPasswordField txt_ConfirmNewPassword;
 
     @FXML
     private JFXButton btn_UpdatePassword;
@@ -132,7 +141,26 @@ public class MainProgram implements Initializable {
     @FXML
     private JFXDatePicker txt_PckEndDate;
 
+    @FXML
+    private JFXButton btn_LinkProdSup;
 
+    @FXML
+    private JFXButton btn_DelProdSupLink;
+
+    @FXML
+    private JFXTextField txt_ProductNameLink;
+
+    @FXML
+    private JFXButton btn_AddProductsLink;
+
+    @FXML
+    private JFXTextField txt_SupplierNameLink;
+
+    @FXML
+    private JFXButton btn_AddSupplierLink;
+
+    @FXML
+    private JFXTextField txt_SupplierIdLink;
 
 
 
@@ -517,7 +545,42 @@ public class MainProgram implements Initializable {
         pan_products.setVisible(true);
         pan_settings.setVisible(false);
         pan_packages.setVisible(false);
+
         pan_invoice.setVisible(false);
+
+        loadProducts();
+        loadSuppliers();
+        loadProdSupLinked();
+    }
+
+    private void loadProdSupLinked() {
+        List<ProductSupplier> prodSupList = PackagesDB.getAllProductSupplierLinked();
+        lst_AllProdSup.getItems().clear();
+        for(ProductSupplier pdsp : prodSupList)
+        {
+            lst_AllProdSup.getItems().add(pdsp);
+        }
+    }
+
+    private void loadSuppliers() {
+        List<Supplier> supList = SupplierDB.getAllSupplier();
+        lst_AllSuppliers.getItems().clear();
+        for(Supplier su : supList)
+        {
+            lst_AllSuppliers.getItems().add(su);
+        }
+    }
+
+    private void loadProducts() {
+        List<Product> prodList = ProductDB.getAllProducts();
+
+        lst_AllProducts.getItems().clear();
+
+        for (Product pd : prodList)
+        {
+            lst_AllProducts.getItems().add(pd);
+        }
+
     }
 
     @FXML
@@ -628,8 +691,18 @@ public class MainProgram implements Initializable {
         String newPassword = txt_NewPassword.getText();
         Integer agentID = Controller.getAgtID();
         try {
-            AgentManagement.ChangePassword(agentID, oldPassword, newPassword);
-            AlertBox.display("Success", "Password successfully updated.", "OK");
+            if((Validator.isFilled(txt_OldPassword,"Current Password")) &&
+                    (Validator.isFilled(txt_NewPassword,"New Password")) &&
+                    (Validator.isFilled(txt_ConfirmNewPassword,"Confirmation Password")) &&
+                    (Validator.validateEqualPass(txt_NewPassword.getText(),txt_ConfirmNewPassword.getText())))
+            {
+                if (AgentManagement.ChangePassword(agentID, oldPassword, newPassword)) {
+                    AlertBox.display("Success", "Password successfully updated.", "OK");
+                }else
+                {
+                    AlertBox.display("Error", "The current Password is incorrect", "OK");
+                }
+            }
         } catch (SQLException e) {
             AlertBox.display("Error", "Database error", "Call tech support");
             e.printStackTrace();
@@ -639,5 +712,110 @@ public class MainProgram implements Initializable {
     @FXML
     void on_ClickBtnLogout(MouseEvent event) {
         System.exit(0);
+    }
+
+    @FXML
+    void on_ClickBtnLinkProdSup(ActionEvent event) {
+        Product prodSel = lst_AllProducts.getSelectionModel().getSelectedItem();
+        Supplier supSel = lst_AllSuppliers.getSelectionModel().getSelectedItem();
+
+        if (prodSel==null){
+            AlertBox.display("Error","You must select one Product from the list","OK");
+        }
+        else if (supSel == null) {
+            AlertBox.display("Error","You must select one Product from the list","OK");
+        }
+        else if (!PackagesDB.isProductSupplierReady(prodSel.getProductId(),supSel.getSupplierId())){
+            AlertBox.display("Error","The relationship already exist","OK");
+        }else
+        {
+            if (PackagesDB.insertProdSupLink(prodSel.getProductId(),supSel.getSupplierId())) {
+                loadProdSupLinked();
+                AlertBox.display("Success", "The relationship was created", "OK");
+            }
+        }
+
+    }
+
+    @FXML
+    void on_ClickDelProdSupLink(ActionEvent event) {
+        ProductSupplier prodSupSel = lst_AllProdSup.getSelectionModel().getSelectedItem();
+        if(!PackagesDB.checkProdSupPkg(prodSupSel.getProductSupplierId()))
+        {
+            if(PackagesDB.deleteProdSupLink(prodSupSel.getProductSupplierId()))
+            {
+                AlertBox.display("Success", "The relationship was deleted", "OK");
+                loadProdSupLinked();
+            }
+        }
+        else
+        {
+            AlertBox.display("Error","The relationship is been used for a package. Please remove the package first","OK");
+        }
+
+    }
+    @FXML
+    void on_ClickBtnAddProductsLink(ActionEvent event) {
+        if(Validator.isFilled(txt_ProductNameLink,"Product Name"))
+        {
+            if (ProductDB.insertProduct(txt_ProductNameLink.getText()))
+            {
+                AlertBox.display("Success", "The Product was added", "OK");
+                loadProducts();
+                txt_ProductNameLink.clear();
+            }
+        }
+    }
+
+    @FXML
+    void on_ClickBtnAddSupplierLink(ActionEvent event) {
+        if((Validator.isFilled(txt_SupplierNameLink,"Supplier Name")) && (Validator.isFilled(txt_SupplierIdLink,"Supplier Id")))
+        {
+            if (SupplierDB.insertSupplier(txt_SupplierNameLink.getText(),Integer.parseInt(txt_SupplierIdLink.getText())))
+            {
+                AlertBox.display("Success", "The Supplier was added", "OK");
+                loadSuppliers();
+                txt_SupplierNameLink.clear();
+                txt_SupplierIdLink.clear();
+            }
+        }
+    }
+
+    @FXML
+    void on_ClickBtnDelProductsLink(ActionEvent event) {
+        Product prodSel = lst_AllProducts.getSelectionModel().getSelectedItem();
+        if(prodSel==null)
+        {
+            AlertBox.display("Error","You must select one Product from the list","OK");
+        }else if(!ProductDB.checkProductUsed(prodSel.getProductId()))
+        {
+            AlertBox.display("Error","There are some Suppliers linked to this product","OK");
+        }else
+        {
+            if(ProductDB.DeleteProductUsed(prodSel.getProductId()))
+            {
+                AlertBox.display("Success", "The Product was deleted", "OK");
+                loadProducts();
+            }
+        }
+    }
+
+    @FXML
+    void on_ClickBtnDelSupplierLink(ActionEvent event) {
+        Supplier supSel = lst_AllSuppliers.getSelectionModel().getSelectedItem();
+        if(supSel==null)
+        {
+            AlertBox.display("Error","You must select one Supplier from the list","OK");
+        }else if(!SupplierDB.checkSupplierUsed(supSel.getSupplierId()))
+        {
+            AlertBox.display("Error","There are some Products linked to this Supplier","OK");
+        }else
+        {
+            if(SupplierDB.DeleteSupplierUsed(supSel.getSupplierId()))
+            {
+                AlertBox.display("Success", "The Supplier was deleted", "OK");
+                loadSuppliers();
+            }
+        }
     }
 }
