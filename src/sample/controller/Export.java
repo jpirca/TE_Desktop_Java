@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.sql.PreparedStatement;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -58,9 +59,10 @@ public class Export {
     }
 
     public static void InvoiceToPDF(List<Invoice> toinvoice) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        DecimalFormat money = new DecimalFormat("##.00");
         String filename = System.getProperty("user.home") + "/Downloads/invoice.pdf";
-        String logopath = System.getProperty("user.dir") + "/TravelExpertDesktop_Java/src/images/company_logo.png";
+        String logopath = System.getProperty("user.dir") + "/src/images/company_logo.png";
         Double amountDue = 0.00;
         for (Invoice record : toinvoice) {
             amountDue += record.getPkgBasePrice() + record.getBasePrice();
@@ -110,15 +112,15 @@ public class Export {
                 table.addCell(Integer.toString(record.getTravelerCount()));
                 table.addCell(record.getPkgName());
                 table.addCell(record.getDescription());
-                table.addCell(Double.toString(record.getPkgBasePrice()));
-                table.addCell(Double.toString(record.getBasePrice()));
+                table.addCell(money.format((Double)record.getPkgBasePrice()));
+                table.addCell(money.format((Double)record.getBasePrice()));
             }
 
             document.add(table);
 
             document.add(new Paragraph(" "));
 
-            document.add(new Paragraph("Total amount due: " + "$ " + amountDue + "0"));
+            document.add(new Paragraph("Total amount due: " + "$ " + money.format(amountDue)));
 
             document.close();
 
